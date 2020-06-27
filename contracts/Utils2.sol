@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity 0.5.12;
 
 
 import "./Utils.sol";
@@ -18,11 +18,11 @@ contract Utils2 is Utils {
 
     function getDecimalsSafe(ERC20 token) internal returns(uint) {
 
-        if (decimals[token] == 0) {
+        if (decimals[address(token)] == 0) {
             setDecimals(token);
         }
 
-        return decimals[token];
+        return decimals[address(token)];
     }
 
     function calcDestAmount(ERC20 src, ERC20 dest, uint srcAmount, uint rate) internal view returns(uint) {

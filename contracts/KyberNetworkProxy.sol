@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity 0.5.12;
 
 
 import "./ERC20.sol";
@@ -15,7 +15,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
 
     KyberNetworkInterface public kyberNetworkContract;
 
-    function KyberNetworkProxy(address _admin) public {
+    constructor(address _admin) public {
         require(_admin != address(0));
         admin = _admin;
     }
@@ -81,7 +81,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
             msg.sender,
             MAX_QTY,
             minConversionRate,
-            0,
+            address(0),
             hint
         );
     }
@@ -100,7 +100,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
             msg.sender,
             MAX_QTY,
             minConversionRate,
-            0,
+            address(0),
             hint
         );
     }
@@ -120,7 +120,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
             msg.sender,
             MAX_QTY,
             minConversionRate,
-            0,
+            address(0),
             hint
         );
     }
@@ -151,7 +151,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         uint maxDestAmount,
         uint minConversionRate,
         address walletId,
-        bytes hint
+        bytes memory hint
     )
     public
     payable
@@ -167,7 +167,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         if (src == ETH_TOKEN_ADDRESS) {
             userBalanceBefore.srcBalance += msg.value;
         } else {
-            require(src.transferFrom(msg.sender, kyberNetworkContract, srcAmount));
+            require(src.transferFrom(msg.sender, address(kyberNetworkContract), srcAmount));
         }
 
         uint reportedDestAmount = kyberNetworkContract.tradeWithHint.value(msg.value)(
@@ -194,7 +194,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         require(tradeOutcome.userDeltaDestAmount <= maxDestAmount);
         require(tradeOutcome.actualRate >= minConversionRate);
 
-        ExecuteTrade(msg.sender, src, dest, tradeOutcome.userDeltaSrcAmount, tradeOutcome.userDeltaDestAmount);
+        emit ExecuteTrade(msg.sender, src, dest, tradeOutcome.userDeltaSrcAmount, tradeOutcome.userDeltaDestAmount);
         return tradeOutcome.userDeltaDestAmount;
     }
 
@@ -202,9 +202,9 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
 
     function setKyberNetworkContract(KyberNetworkInterface _kyberNetworkContract) public onlyAdmin {
 
-        require(_kyberNetworkContract != address(0));
+        require(address(_kyberNetworkContract) != address(0));
 
-        KyberNetworkSet(_kyberNetworkContract, kyberNetworkContract);
+        emit KyberNetworkSet(address(_kyberNetworkContract), address(kyberNetworkContract));
 
         kyberNetworkContract = _kyberNetworkContract;
     }
@@ -244,7 +244,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
 
     function calculateTradeOutcome (uint srcBalanceBefore, uint destBalanceBefore, ERC20 src, ERC20 dest,
         address destAddress)
-    internal returns(TradeOutcome outcome)
+    internal returns(TradeOutcome memory outcome)
     {
         uint userSrcBalanceAfter;
         uint userDestBalanceAfter;

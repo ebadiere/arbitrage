@@ -2,7 +2,7 @@
 // should always do your own testing. If you have questions, visit our
 // https://t.me/KyberDeveloper.
 
-pragma solidity ^0.4.18;
+pragma solidity ^0.5.12;
 
 import "./ERC20.sol";
 import "./KyberNetworkProxy.sol";
@@ -19,7 +19,7 @@ contract KyberSwapContract {
      * @dev Contract constructor
      * @param _kyberNetworkProxyContract KyberNetworkProxy contract address
      */
-    function KyberSwapContract(
+    constructor(
         KyberNetworkProxy _kyberNetworkProxyContract
     ) public {
         kyberNetworkProxyContract = _kyberNetworkProxyContract;
@@ -81,10 +81,10 @@ contract KyberSwapContract {
             destAddress,
             maxDestAmount,
             minConversionRate,
-            0 //walletId for fee sharing program
+            address(0) //walletId for fee sharing program
         );
 
         // Log the event
-        Swap(msg.sender, srcToken, destToken);
+        emit Swap(msg.sender, srcToken, destToken);
     }
 }

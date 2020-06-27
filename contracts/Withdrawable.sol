@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity 0.5.12;
 
 
 import "./ERC20.sol";
@@ -19,9 +19,9 @@ contract Withdrawable is PermissionGroups {
      * @dev Withdraw all ERC20 compatible tokens
      * @param token ERC20 The address of the token contract
      */
-    function withdrawToken(ERC20 token, uint amount, address sendTo) external onlyAdmin {
+    function withdrawToken(ERC20 token, uint amount, address payable sendTo) external onlyAdmin {
         require(token.transfer(sendTo, amount));
-        TokenWithdraw(token, amount, sendTo);
+        emit TokenWithdraw(token, amount, sendTo);
     }
 
     event EtherWithdraw(uint amount, address sendTo);
@@ -29,8 +29,8 @@ contract Withdrawable is PermissionGroups {
     /**
      * @dev Withdraw Ethers
      */
-    function withdrawEther(uint amount, address sendTo) external onlyAdmin {
+    function withdrawEther(uint amount, address payable sendTo) external onlyAdmin {
         sendTo.transfer(amount);
-        EtherWithdraw(amount, sendTo);
+        emit EtherWithdraw(amount, sendTo);
     }
 }

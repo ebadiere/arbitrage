@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity 0.5.12;
 
 
 import "./ERC20.sol";
@@ -16,13 +16,13 @@ contract Utils {
     mapping(address=>uint) internal decimals;
 
     function setDecimals(ERC20 token) internal {
-        if (token == ETH_TOKEN_ADDRESS) decimals[token] = ETH_DECIMALS;
-        else decimals[token] = token.decimals();
+        if (token == ETH_TOKEN_ADDRESS) decimals[address(token)] = ETH_DECIMALS;
+        else decimals[address(token)] = token.decimals();
     }
 
     function getDecimals(ERC20 token) internal view returns(uint) {
         if (token == ETH_TOKEN_ADDRESS) return ETH_DECIMALS; // save storage access
-        uint tokenDecimals = decimals[token];
+        uint tokenDecimals = decimals[address(token)];
         // technically, there might be token with decimals 0
         // moreover, very possible that old tokens have decimals 0
         // these tokens will just have higher gas fees.
