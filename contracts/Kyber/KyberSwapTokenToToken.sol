@@ -1,7 +1,7 @@
 // All code examples in this guide have not been audited and should not be used in production.
 // If so, it is done at your own risk!
 
-pragma solidity ^0.5.12;
+pragma solidity ^0.6.6;
 
 import "./KyberNetworkProxy.sol";
 

@@ -2,7 +2,7 @@
 // should always do your own testing. If you have questions, visit our
 // https://t.me/KyberDeveloper.
 
-pragma solidity ^0.5.12;
+pragma solidity ^0.6.6;
 
 import "./ERC20.sol";
 import "./KyberNetworkProxy.sol";

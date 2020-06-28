@@ -1,4 +1,4 @@
-pragma solidity 0.5.12;
+pragma solidity 0.6.6;
 
 
 import "./ERC20.sol";
@@ -70,6 +70,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         uint minConversionRate
     )
     public
+    override
     returns(uint)
     {
         bytes memory hint;
@@ -90,7 +91,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
     /// @param token Destination token
     /// @param minConversionRate The minimal conversion rate. If actual rate is lower, trade is canceled.
     /// @return amount of actual dest tokens
-    function swapEtherToToken(ERC20 token, uint minConversionRate) public payable returns(uint) {
+    function swapEtherToToken(ERC20 token, uint minConversionRate) public override payable returns(uint) {
         bytes memory hint;
 
         return tradeWithHint(
@@ -110,7 +111,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
     /// @param srcAmount amount of src tokens
     /// @param minConversionRate The minimal conversion rate. If actual rate is lower, trade is canceled.
     /// @return amount of actual dest tokens
-    function swapTokenToEther(ERC20 token, uint srcAmount, uint minConversionRate) public returns(uint) {
+    function swapTokenToEther(ERC20 token, uint srcAmount, uint minConversionRate) public override returns(uint) {
         bytes memory hint;
 
         return tradeWithHint(
@@ -154,6 +155,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         bytes memory hint
     )
     public
+    override
     payable
     returns(uint)
     {
@@ -170,7 +172,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
             require(src.transferFrom(msg.sender, address(kyberNetworkContract), srcAmount));
         }
 
-        uint reportedDestAmount = kyberNetworkContract.tradeWithHint.value(msg.value)(
+        uint reportedDestAmount = kyberNetworkContract.tradeWithHint{value: msg.value}(
             msg.sender,
             src,
             srcAmount,
@@ -210,29 +212,29 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
     }
 
     function getExpectedRate(ERC20 src, ERC20 dest, uint srcQty)
-    public view
+    public override view
     returns(uint expectedRate, uint slippageRate)
     {
         return kyberNetworkContract.getExpectedRate(src, dest, srcQty);
     }
 
-    function getUserCapInWei(address user) public view returns(uint) {
+    function getUserCapInWei(address user) public override view returns(uint) {
         return kyberNetworkContract.getUserCapInWei(user);
     }
 
-    function getUserCapInTokenWei(address user, ERC20 token) public view returns(uint) {
+    function getUserCapInTokenWei(address user, ERC20 token) public override view returns(uint) {
         return kyberNetworkContract.getUserCapInTokenWei(user, token);
     }
 
-    function maxGasPrice() public view returns(uint) {
+    function maxGasPrice() public override view returns(uint) {
         return kyberNetworkContract.maxGasPrice();
     }
 
-    function enabled() public view returns(bool) {
+    function enabled() public override view returns(bool) {
         return kyberNetworkContract.enabled();
     }
 
-    function info(bytes32 field) public view returns(uint) {
+    function info(bytes32 field) public override view returns(uint) {
         return kyberNetworkContract.info(field);
     }
 
