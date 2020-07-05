@@ -159,7 +159,7 @@ FlashLoanReceiverBase(address(0x506B0B2CF20FAA8f38a4E2B524EE43e1f4458Cc5))
         uint destAmount = proxy.swapTokenToToken(srcToken, srcQty, destToken, minConversionRate);
 
         // Send the swapped tokens to the destination address
-        require(destToken.transfer(msg.sender, destAmount));
+        require(destToken.transfer(destAddress, destAmount));
         // Log the event
         emit Swap(msg.sender, srcToken, destToken, destAmount);
     }
