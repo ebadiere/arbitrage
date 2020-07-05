@@ -32,18 +32,19 @@ import "../Kyber/KyberNetworkProxy.sol";
  *
  * Mainnet addresses:
  * aave lending provider: 0x24a42fD28C976A61Df5D00D0599C34c4f90748c8
+ * DAI_ADDRESS = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
  * uniswap 1 factory: 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95
- * uniswap 2 factory: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+ * kyberswap  factory: 0x818E6FECD516Ecc3849DAf6845e3EC868087B755
  */
 contract Uni1KyberArbitrageur is
-FlashLoanReceiverBase(address(0x506B0B2CF20FAA8f38a4E2B524EE43e1f4458Cc5))
+FlashLoanReceiverBase(address(0x24a42fD28C976A61Df5D00D0599C34c4f90748c8))
 {
     event Swap(address indexed sender, KyberERC20 srcToken, KyberERC20 destToken, uint amount);
 
     // still kovan addresses for now
-    address public constant DAI_ADDRESS = 0xC4375B7De8af5a38a93548eb8453a498222C4fF2;
-    address public constant UNISWAP_1_FACTORY = 0xECc6C0542710a0EF07966D7d1B10fA38bbb86523;
-    address public constant KYBERSWAP_PROXY = 0x692f391bCc85cefCe8C237C01e1f636BbD70EA4D;
+    address public constant DAI_ADDRESS = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+    address public constant UNISWAP_1_FACTORY = 0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95;
+    address public constant KYBERSWAP_PROXY = 0x818E6FECD516Ecc3849DAf6845e3EC868087B755;
 
     address public tokenAddress;
 
