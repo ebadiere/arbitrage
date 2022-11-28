@@ -6,13 +6,16 @@ import "../src/Counter.sol";
 
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol";
 import "@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolState.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/IQuoter.sol";
 
 contract UniswapV3FeaturesTest is Test {
 
     address private constant FACTORY = 0x1F98431c8aD98523631AE4a59f267346ea31F984;
+    address private constant QUOTER = 0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6;
     address private constant SHIB = 0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE;
     address private constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
+    IQuoter iQuoter;
     IUniswapV3Factory iUniswapV3Factory;
     IUniswapV3PoolState iUniswapV3PoolState;
 
@@ -25,18 +28,29 @@ contract UniswapV3FeaturesTest is Test {
 
     function setUp() public {
         iUniswapV3Factory = IUniswapV3Factory(FACTORY);
+        iQuoter = IQuoter(QUOTER);
     }
 
     function testGetShibEthPoolAddresses() public {
-        
-        address zeroPointFivePoolAddr = iUniswapV3Factory.getPool(SHIB, WETH, stablePoolTier);
+        // getSqrtPriceX96(SHIB, WETH, stablePoolTier);
+        console.log("sqrtPriceX96: ", getSqrtPriceX96(SHIB, WETH, stablePoolTier));   
+    }
+
+    function testQuoteExactInputSingle() public {
+        console.log("Test quoteExactInputSingle!");
+        uint256 amountIn = 1000 * 1e18;
+        uint256 amountOut = iQuoter.quoteExactInputSingle(SHIB, WETH, stablePoolTier, amountIn, 0);
+        console.log("Aoumt Out: ", amountOut);
+    
+    }
+
+    function getSqrtPriceX96(address tokenIn, address tokenOut, uint24 tier) internal returns (uint160 sqrtPrice){
+        address zeroPointFivePoolAddr = iUniswapV3Factory.getPool(tokenIn, tokenOut, tier);
         console.log("0.05 tier address: ", zeroPointFivePoolAddr);
 
         iUniswapV3PoolState = IUniswapV3PoolState(zeroPointFivePoolAddr);
-        (sqrtPriceX96,,,,,,) = iUniswapV3PoolState.slot0();
-        console.log("sqrtPriceX96: ", sqrtPriceX96);
-        
-
+        (sqrtPrice,,,,,,) = iUniswapV3PoolState.slot0();
+        return sqrtPrice;
     }
 
 } 
