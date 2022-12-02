@@ -32,7 +32,6 @@ contract UniswapV3FeaturesTest is Test {
     }
 
     function testGetShibEthPoolAddresses() public {
-        // getSqrtPriceX96(SHIB, WETH, stablePoolTier);
         console.log("sqrtPriceX96: ", getSqrtPriceX96(SHIB, WETH, stablePoolTier));   
     }
 
@@ -40,7 +39,7 @@ contract UniswapV3FeaturesTest is Test {
         console.log("Test quoteExactInputSingle!");
         uint256 amountIn = 1000 * 1e18;
         uint256 amountOut = iQuoter.quoteExactInputSingle(SHIB, WETH, stablePoolTier, amountIn, 0);
-        console.log("Aoumt Out: ", amountOut);
+        console.log("Amount Out: ", amountOut);
     
     }
 
