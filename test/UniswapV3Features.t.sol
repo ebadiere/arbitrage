@@ -38,7 +38,7 @@ contract UniswapV3FeaturesTest is Test {
     function testQuoteExactInputSingle() public {
         console.log("Test quoteExactInputSingle!");
         uint256 amountIn = 1000 * 1e18;
-        uint256 amountOut = iQuoter.quoteExactInputSingle(SHIB, WETH, stablePoolTier, amountIn, 0);
+        uint256 amountOut = iQuoter.quoteExactInputSingle(SHIB, WETH, mediumRiskTier, amountIn, 0);
         console.log("Amount Out: ", amountOut);
     
     }
